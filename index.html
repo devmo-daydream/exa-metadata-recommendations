@@ -28,6 +28,7 @@
   .sb-brand{padding:24px 22px 18px;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;background:var(--near-black);z-index:2}
   .sb-brand .logo{display:flex;align-items:center;gap:9px;font-weight:700;color:var(--off-white);font-size:15px}
   .sb-brand .logo .dot{width:20px;height:20px;border-radius:6px;background:var(--grad);display:inline-block}
+  .sb-brand .logo .dd-mark{flex-shrink:0;display:block}
   .sb-brand .sub{color:#8a8a8a;font-size:11.5px;margin-top:7px;font-weight:500;line-height:1.4}
   .sb-brand .sub b{color:var(--mint);font-weight:700}
   .sb-group{padding:16px 12px 0}
@@ -220,7 +221,7 @@
 <div class="app">
   <aside class="sidebar">
     <div class="sb-brand">
-      <div class="logo"><span class="dot"></span> Exa</div>
+      <div class="logo"><svg class="dd-mark" width="22" height="22" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="78" height="78" rx="9" fill="url(#dd_grad)"/><rect x="1" y="1" width="78" height="78" rx="9" stroke="#232323" stroke-width="2"/><path d="M57.875 20.0347C57.875 20.0347 34.659 55.5902 27.0008 55.5902C19.3426 55.5902 29.2975 33.7213 41.2151 33.7213C52.4402 33.7213 27.0666 55.5902 36.5631 55.5902C42.1563 55.5902 51.2626 43.146 51.2626 43.146" stroke="#232323" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="dd_grad" x1="0" y1="40" x2="80" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#C3F2D0"/><stop offset="0.53" stop-color="#B3EAFF"/><stop offset="1" stop-color="#FEE3CC"/></linearGradient></defs></svg> Exa</div>
       <div class="sub">Title tag &amp; meta description recommendations<br>built by <b>daydream</b></div>
     </div>
     <div class="sb-group">
@@ -259,25 +260,25 @@ var DATA = [
     currentTitle:"Exa | Web Search API, AI Search Engine, & Website Crawler",
     currentDesc:"Real-time AI search engine with a powerful web search API, web crawling API, SERP API, and deep research tools. Search and extract structured content from websites and live data.",
     recTitle:"Search API for AI Agents — Real-Time Web Data | Exa",
-    recDesc:"Search API for AI agents that need real-time web data, SERP results, deep research, and structured content from one endpoint. ✓ Try API for free." },
+    recDesc:"Search API for AI agents that need real-time web data, SERP results, deep research, and structured content from one endpoint. ✓ Try our API for free." },
 
   { slug:"websets", name:"Websets", url:"exa.ai/websets", primaryKw:"websets", primarySrc:"KWR", kd:3, vol:150,
     currentTitle:"Websets | People Search, AI SDR & B2B Lead Generation",
     currentDesc:"Use Websets for people search, AI SDR discovery, lead generation, and B2B marketing. Explore sales automation tools and AI research tools in one place.",
     recTitle:"Websets | AI-Powered People Search & B2B Lead Generation",
-    recDesc:"Websets uses AI to handle people search, B2B prospecting, sales research, and lead enrichment from a single prompt. ✓ Try API for free." },
+    recDesc:"Websets uses AI to handle people search, B2B prospecting, sales research, and lead enrichment from a single prompt. ✓ Try our API for free." },
 
   { slug:"products-search", name:"Search product", url:"exa.ai/products/search", primaryKw:"ai web search", primarySrc:"KWR", kd:52, vol:500,
     currentTitle:"Search | Exa",
     currentDesc:"Real-time AI search engine with a powerful web search API, web crawling API, SERP API, and deep research tools. Search and extract structured content from websites and live data.",
     recTitle:"AI Web Search for Agents — Built on Exa Search API",
-    recDesc:"AI web search built for production agents. Get the highest-quality results at every latency with neural retrieval and live web data. ✓ Try API for free." },
+    recDesc:"AI web search built for production agents. Get the highest-quality results at every latency with neural retrieval and live web data. ✓ Try our API for free." },
 
   { slug:"products-deep", name:"Deep product", url:"exa.ai/products/deep", primaryKw:"deep research", primarySrc:"KWR", kd:60, vol:6700,
     currentTitle:"Deep Search Endpoint | Exa",
     currentDesc:"Real-time AI search engine with a powerful web search API, web crawling API, SERP API, and deep research tools. Search and extract structured content from websites and live data.",
     recTitle:"Deep Research API for AI Agents — Multi-Step Web Search",
-    recDesc:"Deep Research API for AI agents that need complex multi-step searches, browsing, and synthesis across the live web. ✓ Try API for free." },
+    recDesc:"Deep Research API for AI agents that need complex multi-step searches, browsing, and synthesis across the live web. ✓ Try our API for free." },
 
   { slug:"mcp", name:"MCP Server", url:"exa.ai/mcp", primaryKw:"exa mcp", primarySrc:"KWR", kd:null, vol:1000,
     currentTitle:"Exa MCP Server — AI Web Search for Claude, Cursor & VS Code",
@@ -289,7 +290,7 @@ var DATA = [
     currentTitle:"API Pricing | Exa",
     currentDesc:"Explore Exa AI pricing – flexible plans to scale your AI with powerful, real-time web search.",
     recTitle:"Exa API Pricing | Pay-as-You-Go Plans for AI Search",
-    recDesc:"Exa API pricing: pay-as-you-go plans for AI web search, deep research, and Websets. Free tier and enterprise pricing available. ✓ Try API for free." }
+    recDesc:"Exa API pricing: pay-as-you-go plans for AI web search, deep research, and Websets. Free tier and enterprise pricing available. ✓ Try our API for free." }
 ];
 
 /* helpers */
