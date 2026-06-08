@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Editor swap / backup files
+*.swp
+*~
+*.bak
+
+# Local environment (we don't use one yet, but don't commit if added later)
+.env
+.env.local
+.env.*.local
+
+# Node / build artifacts (none here today, but future-proof)
+node_modules/
+dist/
+.next/
+
+# Vercel local
+.vercel

@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Exa — Title Tag &amp; Meta Description Recommendations · daydream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --pink:#FFCADF; --lavender:#EED1FF; --lavender-lt:#F7E8FD; --blue-ice:#D0F2FF;
+    --mint:#C3F2D0; --peach-warm:#D8AAFF; --off-white:#FFFFFB; --warm-cream:#FFF9F4;
+    --near-black:#232323; --text-subtle:#6B6B6B; --border:#E8E2DC;
+    --grad:linear-gradient(135deg,#C3F2D0 0%,#B3EAFF 53%,#FEE3CC 100%);
+    --grad-h:linear-gradient(90deg,#C3F2D0 0%,#B3EAFF 53%,#FEE3CC 100%);
+    --sidebar-w:288px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Raleway',sans-serif;background:var(--warm-cream);color:var(--near-black);min-height:100vh;font-size:15px;-webkit-font-smoothing:antialiased}
+  a{color:#7c3aed;text-decoration:none}a:hover{text-decoration:underline}
+  h1,h2,h3,h4{margin:0;line-height:1.2}
+  .app{display:flex;min-height:100vh}
+  .sidebar{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--near-black);color:#CFCBC6;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:30}
+  .main{margin-left:var(--sidebar-w);flex:1;min-width:0}
+
+  .sb-brand{padding:24px 22px 18px;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;background:var(--near-black);z-index:2}
+  .sb-brand .logo{display:flex;align-items:center;gap:9px;font-weight:700;color:var(--off-white);font-size:15px}
+  .sb-brand .logo .dot{width:20px;height:20px;border-radius:6px;background:var(--grad);display:inline-block}
+  .sb-brand .sub{color:#8a8a8a;font-size:11.5px;margin-top:7px;font-weight:500;line-height:1.4}
+  .sb-brand .sub b{color:var(--mint);font-weight:700}
+  .sb-group{padding:16px 12px 0}
+  .sb-group-t{font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:#7a756f;font-weight:800;padding:0 11px 8px;display:flex;align-items:center;gap:8px}
+  .sb-group-t .pdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--mint)}
+  .sb-group-t.t2 .pdot{background:var(--peach-warm)}
+  .sb-group-t.t3 .pdot{background:#8a8a8a}
+  .sb-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;color:#C7C2BC;cursor:pointer;font-size:13px;font-weight:500;margin-bottom:2px;border:1px solid transparent;line-height:1.3}
+  .sb-item:hover{background:rgba(255,255,255,.05);color:var(--off-white);text-decoration:none}
+  .sb-item.active{background:var(--lavender);color:#4a1a7a;font-weight:700;border-color:#c49aff}
+  .sb-item span:first-child{flex:1;min-width:0}
+  .sb-item .pill{margin-left:auto;font-size:9px;font-weight:800;padding:2px 7px;border-radius:999px;letter-spacing:.04em;flex-shrink:0}
+  .pill-t1{background:var(--mint);color:#1a5c2a}
+  .pill-t2{background:var(--peach-warm);color:#3a1066}
+  .pill-t3{background:#3a3a3a;color:#cfcbc6}
+  .sb-item.active .pill-t1{background:#9be8ab}
+  .sb-item.active .pill-t2{background:#b88aff}
+  .sb-item.active .pill-t3{background:#cfcbc6;color:#232323}
+  .sb-star{color:var(--peach-warm);font-size:11px;flex-shrink:0}
+  .sb-item.active .sb-star{color:#7c3aed}
+  .sb-foot{padding:18px 22px 30px;font-size:11px;color:#6f6a64;line-height:1.5}
+
+  .page-header{background:var(--near-black);position:relative;overflow:hidden}
+  .page-header-inner{max-width:1180px;margin:0 auto;padding:38px 64px 64px;position:relative;z-index:1}
+  .page-header::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:54px;background:var(--warm-cream);clip-path:ellipse(60% 100% at 50% 100%)}
+  .ph-top{display:flex;align-items:flex-start;gap:18px}
+  .header-eyebrow{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--mint);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .header-eyebrow::before{content:'✦';background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .page-title{font-size:clamp(25px,3vw,35px);font-weight:500;color:var(--off-white);line-height:1.14;margin-bottom:16px}
+  .page-meta{font-size:13px;font-weight:500;display:flex;gap:22px;flex-wrap:wrap}
+  .page-meta span{display:flex;align-items:center;gap:6px;color:#8a8a8a}
+  .page-meta span strong{color:var(--off-white);font-weight:600}
+  .page-meta .ph-pill{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:999px;letter-spacing:.04em;margin-left:4px}
+  .ph-pill.t1{background:var(--mint);color:#1a5c2a}
+  .ph-pill.t2{background:var(--peach-warm);color:#3a1066}
+  .ph-pill.t3{background:#3a3a3a;color:#cfcbc6}
+  .ph-pill.kwr{background:var(--blue-ice);color:#155e75}
+  .ph-pill.inf{background:var(--lavender-lt);color:#4a1a7a}
+
+  .tabbar{max-width:1180px;margin:0 auto;padding:6px 64px 0;display:flex;gap:6px}
+  .tab{font-family:'Raleway';font-size:13.5px;font-weight:700;color:var(--text-subtle);padding:11px 22px;border-radius:12px 12px 0 0;cursor:pointer;background:transparent;border:1px solid transparent;border-bottom:none}
+  .tab:hover{color:var(--near-black)}
+  .tab.active{color:var(--near-black);background:var(--off-white);border-color:var(--border)}
+  .tab .tcount{margin-left:7px;font-size:11px;font-weight:800;background:var(--lavender);color:#4a1a7a;padding:1px 8px;border-radius:999px}
+  .panel{display:none}.panel.active{display:block}
+  .main-pad{max-width:1180px;margin:0 auto;padding:28px clamp(24px,5vw,64px) 120px}
+
+  /* meta card */
+  .meta-card{background:var(--off-white);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:22px}
+  .meta-card-header{background:var(--near-black);padding:13px 24px;display:flex;align-items:center;gap:10px}
+  .meta-card-header span{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--mint)}
+  .meta-card-header .mch-sub{margin-left:auto;font-size:11px;color:#8a8a8a;letter-spacing:0;text-transform:none;font-weight:500}
+  .meta-table{width:100%;border-collapse:collapse;font-size:13px}
+  .meta-table tr{border-bottom:1px solid var(--border)}.meta-table tr:last-child{border-bottom:none}
+  .meta-table td{padding:12px 24px;vertical-align:top;line-height:1.55}
+  .meta-table td:first-child{font-weight:800;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-subtle);width:170px;white-space:nowrap;background:var(--warm-cream)}
+  .meta-table .mono{font-family:'JetBrains Mono';font-size:12px;background:var(--warm-cream);padding:2px 7px;border-radius:5px}
+  .kbadge{display:inline-block;font-size:11px;font-weight:800;padding:2px 9px;border-radius:999px;background:#7c3aed;color:#fff}
+  .kbadge.kwr{background:var(--blue-ice);color:#155e75}
+  .kbadge.inf{background:var(--lavender-lt);color:#4a1a7a}
+  .charcount{color:var(--text-subtle);font-weight:600;font-size:11px;margin-left:8px;font-family:'JetBrains Mono'}
+  .charcount.ok{color:#1a5c2a}
+  .charcount.warn{color:#9a6313}
+  .charcount.bad{color:#a8302e}
+  .draft-hint{background:var(--blue-ice);border:1px solid #9fdcf0;border-radius:12px;padding:13px 18px;margin:0 0 22px;font-size:13px;color:#155e75;line-height:1.5}
+  .draft-hint b{font-weight:800}
+  .opt-label{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.05em;padding:2px 8px;border-radius:5px;margin-right:8px;vertical-align:middle}
+  .opt-A{background:#34b864;color:#fff}
+  .opt-B{background:#7c3aed;color:#fff}
+  .opt-cur{background:#9a6313;color:#fff}
+  .note-row td{background:#fff8ee;color:#5a4420;font-size:12.5px;line-height:1.55}
+  .note-row td:first-child{background:#fff8ee;color:#9a6313}
+
+  /* SERP preview */
+  .serp-stage{background:#ECEAE6;border-radius:16px;padding:34px clamp(14px,3vw,40px) 44px;border:1px solid var(--border)}
+  .serp-note{max-width:760px;margin:0 auto 22px;font-size:12.5px;color:var(--text-subtle);background:var(--off-white);border:1px solid var(--border);border-radius:10px;padding:11px 16px;line-height:1.55}
+  .serp-note b{color:var(--near-black);font-weight:800}
+  .serp-paper{max-width:760px;margin:0 auto 18px;background:#fff;border:1px solid #e3ded7;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.06);padding:24px 28px 26px}
+  .serp-paper.cur{opacity:.85}
+  .serp-paper-lbl{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:13px;display:flex;align-items:center;gap:10px}
+  .serp-paper-lbl .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+  .serp-paper.cur .serp-paper-lbl .dot{background:#9a6313}
+  .serp-paper.recA .serp-paper-lbl .dot{background:#34b864}
+  .serp-paper.recB .serp-paper-lbl .dot{background:#7c3aed}
+  .serp-result{font-family:'Arial',sans-serif}
+  .serp-fav{display:flex;align-items:center;gap:11px;margin-bottom:3px}
+  .serp-fav .favico{width:26px;height:26px;border-radius:50%;background:var(--near-black);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Raleway';font-weight:800;font-size:13px}
+  .serp-fav .site{font-family:'Arial',sans-serif;font-size:14px;color:#202124;line-height:1.2}
+  .serp-fav .site .name{font-weight:500}
+  .serp-fav .site .url{font-size:12px;color:#5f6368;margin-top:1px}
+  .serp-title{font-family:'Arial',sans-serif;font-size:20px;line-height:1.3;color:#1a0dab;font-weight:400;margin:5px 0 3px;cursor:pointer}
+  .serp-title:hover{text-decoration:underline}
+  .serp-desc{font-family:'Arial',sans-serif;font-size:14px;line-height:1.58;color:#4d5156}
+  .serp-trunc-hint{margin-top:8px;font-size:11px;color:#9a6313;font-style:italic}
+
+  .summary-card{background:var(--off-white);border:1px solid var(--border);border-radius:16px;padding:24px 28px;margin-bottom:22px}
+  .summary-card h3{font-size:14px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:14px}
+  .stat-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+  .stat{flex:1;min-width:160px;background:var(--warm-cream);border:1px solid var(--border);border-radius:11px;padding:14px 18px}
+  .stat .lbl{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-subtle)}
+  .stat .val{font-size:28px;font-weight:800;color:var(--near-black);margin-top:4px;line-height:1}
+  .stat .sub{font-size:11.5px;color:var(--text-subtle);margin-top:4px}
+
+  /* overview-only styles */
+  .ov-section{background:var(--off-white);border:1px solid var(--border);border-radius:16px;padding:28px 32px 30px;margin-bottom:18px}
+  .ov-section h2{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:18px;display:flex;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+  .ov-section h2::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--grad);display:inline-block;flex-shrink:0}
+  .ov-section h3{font-size:14px;font-weight:800;color:var(--near-black);margin:22px 0 8px}
+  .ov-section h3:first-of-type{margin-top:0}
+  .ov-section p{font-size:14px;line-height:1.7;color:#2c2c2c;margin:0 0 14px}
+  .ov-section ul,.ov-section ol{margin:0 0 14px;padding-left:22px}
+  .ov-section li{font-size:14px;line-height:1.7;color:#2c2c2c;margin:6px 0}
+  .ov-section li strong{font-weight:800;color:var(--near-black)}
+  .ov-section .lead{font-size:15px;line-height:1.65;color:#2c2c2c;background:var(--warm-cream);border:1px solid var(--border);border-left:4px solid #7c3aed;border-radius:10px;padding:16px 20px;margin:0 0 22px}
+  .ov-section .lead b{font-weight:800;color:var(--near-black)}
+
+  .ov-process{counter-reset:step;list-style:none;padding:0;margin:0}
+  .ov-process li{counter-increment:step;position:relative;padding:14px 16px 14px 56px;margin-bottom:10px;background:var(--warm-cream);border:1px solid var(--border);border-radius:11px;font-size:14px;line-height:1.65}
+  .ov-process li::before{content:counter(step);position:absolute;left:14px;top:13px;width:30px;height:30px;border-radius:50%;background:var(--near-black);color:var(--mint);display:flex;align-items:center;justify-content:center;font-family:'Inter';font-weight:800;font-size:14px}
+  .ov-process li b{font-weight:800;color:var(--near-black);display:block;margin-bottom:3px;font-size:14.5px}
+
+  .ov-kwr-tbl{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);border-radius:11px;overflow:hidden;font-size:13.5px;margin-bottom:6px}
+  .ov-kwr-tbl th{background:var(--near-black);color:var(--mint);font-size:11px;letter-spacing:.08em;text-transform:uppercase;text-align:left;padding:11px 14px;font-weight:800}
+  .ov-kwr-tbl td{padding:11px 14px;border-top:1px solid var(--border);color:#2c2c2c}
+  .ov-kwr-tbl td:first-child{font-weight:700}
+  .ov-kwr-tbl tr:nth-child(even) td{background:var(--warm-cream)}
+  .ov-kwr-tbl .mono{font-family:'JetBrains Mono';font-size:12.5px;background:var(--off-white);padding:2px 7px;border-radius:5px;border:1px solid var(--border)}
+
+  .ov-callout{display:flex;gap:14px;padding:16px 18px;background:#fff8ee;border:1px solid #e89a2c;border-left-width:4px;border-radius:11px;font-size:13.5px;line-height:1.6;color:#5a4420;margin:10px 0 4px}
+  .ov-callout b{color:#9a6313;font-weight:800}
+  .ov-callout .ico{font-size:18px;flex-shrink:0;line-height:1.3}
+
+  .ov-source-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+  .ov-source{background:var(--warm-cream);border:1px solid var(--border);border-radius:11px;padding:14px 16px}
+  .ov-source .src-t{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:5px}
+  .ov-source .src-n{font-size:13.5px;font-weight:700;color:var(--near-black);margin-bottom:5px}
+  .ov-source .src-d{font-size:12.5px;color:#5a5a5a;line-height:1.55}
+
+  .ov-pattern{background:var(--warm-cream);border:1px solid var(--border);border-radius:11px;padding:14px 18px;margin-bottom:14px}
+  .ov-pattern .pt-l{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:6px}
+  .ov-pattern .pt-rule{font-family:'JetBrains Mono';font-size:13px;color:var(--near-black);background:var(--off-white);border:1px solid var(--border);border-radius:7px;padding:8px 12px;display:inline-block;margin-bottom:8px}
+  .ov-pattern .pt-d{font-size:13px;color:#5a5a5a;line-height:1.6}
+
+  .ov-ab{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .ov-ab-card{border-radius:12px;padding:16px 18px;border:1.5px solid}
+  .ov-ab-card.a{background:#f0fbf3;border-color:#7dd396}
+  .ov-ab-card.b{background:var(--lavender-lt);border-color:#c49aff}
+  .ov-ab-card h4{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .ov-ab-card.a h4{color:#1a5c2a}
+  .ov-ab-card.b h4{color:#4a1a7a}
+  .ov-ab-card p{font-size:13.5px;line-height:1.6;color:#2c2c2c;margin:0}
+  .ov-ab-card .badge{font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:5px;letter-spacing:.04em}
+  .ov-ab-card.a .badge{background:#34b864;color:#fff}
+  .ov-ab-card.b .badge{background:#7c3aed;color:#fff}
+
+  @media(max-width:640px){
+    .ov-ab{grid-template-columns:1fr}
+  }
+
+  /* review bars (Approve / Request edits + comment) */
+  .review{background:var(--lavender-lt);border:1px solid var(--peach-warm);border-radius:13px;padding:13px 16px;margin:14px 24px 18px}
+  .review.is-approved{background:#f0fbf3;border-color:#8edda0}
+  .review.is-rejected{background:#fff4e5;border-color:#e89a2c}
+  .rv-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .rv-lbl{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#4a1a7a;margin-right:4px}
+  .rv-btn{font-family:'Raleway';font-size:12.5px;font-weight:700;padding:6px 13px;border-radius:999px;border:1.5px solid var(--border);background:var(--off-white);color:var(--near-black);cursor:pointer}
+  .rv-btn:hover{border-color:#c49aff}
+  .rv-approve.on{background:var(--mint);border-color:#7dd396;color:#1a5c2a}
+  .rv-reject.on{background:#fff4e5;border-color:#e89a2c;color:#9a6313}
+  .rv-saved{font-size:11px;font-weight:700;color:#1a5c2a;opacity:0;transition:opacity .2s}
+  .rv-saved.show{opacity:1}
+  .rv-status{font-size:11px;font-weight:800;margin-left:auto}
+  .rv-status[data-st="approve"]{color:#1a5c2a}
+  .rv-status[data-st="reject"]{color:#9a6313}
+  .rv-fb{width:100%;margin-top:10px;font-family:'Raleway';font-size:13px;padding:9px 12px;border:1px solid var(--border);border-radius:9px;background:var(--off-white);resize:vertical;min-height:38px;color:var(--near-black)}
+  .rv-fb:focus{outline:none;border-color:#c49aff}
+
+  /* review status pill in header */
+  .ph-pill.rv{background:var(--mint);color:#1a5c2a}
+  .ph-pill.rv.zero{background:rgba(255,255,255,.12);color:#cfcbc6}
+
+  @media(max-width:860px){
+    .sidebar{position:static;width:100%;height:auto;min-width:0}
+    .main{margin-left:0}
+    .page-header-inner,.tabbar,.main-pad{padding-left:24px;padding-right:24px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="logo"><span class="dot"></span> Exa</div>
+      <div class="sub">Title tag &amp; meta description recommendations<br>built by <b>daydream</b></div>
+    </div>
+    <div class="sb-group">
+      <div class="sb-group-t"><span class="pdot" style="background:var(--lavender)"></span> Start here</div>
+      <div id="sbList-ov"></div>
+    </div>
+    <div class="sb-group">
+      <div class="sb-group-t"><span class="pdot"></span> Tier 1 · Conversion drivers</div>
+      <div id="sbList-t1"></div>
+    </div>
+    <div class="sb-group">
+      <div class="sb-group-t t2"><span class="pdot"></span> Tier 2 · Proof &amp; discovery</div>
+      <div id="sbList-t2"></div>
+    </div>
+    <div class="sb-group">
+      <div class="sb-group-t t3"><span class="pdot"></span> Tier 3 · Company &amp; support</div>
+      <div id="sbList-t3"></div>
+    </div>
+    <div class="sb-foot">22 pages · 6 KWR-mapped + 16 inferred.<br>Targets: title 50–60, desc 140–160.</div>
+  </aside>
+
+  <main class="main">
+    <header class="page-header">
+      <div class="page-header-inner">
+        <div class="ph-top">
+          <div style="flex:1">
+            <div class="header-eyebrow">Exa.ai · Metadata optimization</div>
+            <h1 class="page-title" id="hTitle"></h1>
+            <div class="page-meta" id="hMeta"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="tabbar" id="tabbar">
+      <button class="tab active" data-tab="compare" id="tabCompare">Current vs Recommended</button>
+      <button class="tab" data-tab="serp" id="tabSerp">SERP preview</button>
+    </div>
+    <div class="main-pad">
+      <section class="panel" data-panel="overview" id="panelOverview"></section>
+      <section class="panel active" data-panel="compare" id="panelCompare"></section>
+      <section class="panel" data-panel="serp" id="panelSerp"></section>
+    </div>
+  </main>
+</div>
+
+<script>
+var DATA = [
+  // ─── Tier 1 ───
+  { slug:"home", tier:1, name:"Home", url:"exa.ai/", h1:"Web search, built for AI agents",
+    primaryKw:"search api", primarySrc:"KWR", kd:52, vol:1100,
+    currentTitle:"Exa | Web Search API, AI Search Engine, & Website Crawler",
+    currentDesc:"Real-time AI search engine with a powerful web search API, web crawling API, SERP API, and deep research tools. Search and extract structured content from websites and live data.",
+    recTitleA:"Exa | Web Search API & AI Search Engine for Agents",
+    recTitleB:"Exa | Search API for AI Agents — Real-Time Web Search Data",
+    recDescA:"Exa is the search API and AI search engine for agents. Get real-time, structured web content, SERP data, and deep research. ✓ Try the API free.",
+    recDescB:"Building an AI agent that needs the live web? Exa is the search API for real-time web content, SERP data, and deep research. ✓ Try the API free.",
+    note:"Current title already strong on keyword packing; refresh to lead with primary KW + 'for agents' framing. Description trims 178 → 150s and adds a CTA." },
+
+  { slug:"websets", tier:1, name:"Websets", url:"exa.ai/websets", h1:"Build impossible lists in minutes",
+    primaryKw:"websets", primarySrc:"KWR", kd:3, vol:150,
+    currentTitle:"Websets | People Search, AI SDR & B2B Lead Generation",
+    currentDesc:"Use Websets for people search, AI SDR discovery, lead generation, and B2B marketing. Explore sales automation tools and AI research tools in one place.",
+    recTitleA:"Websets | AI-Powered People Search & B2B Lead Generation",
+    recTitleB:"Websets by Exa | People Search, AI SDR & B2B Lists",
+    recDescA:"Need to build a perfect ICP list? Exa Websets is the AI SDR for people search, B2B lead gen, and sales automation. ✓ Try Websets free today.",
+    recDescB:"Build impossible lists in minutes. Exa Websets uses AI for people search, B2B prospecting, and sales research from one prompt. ✓ Try Websets free.",
+    note:"Current data already in range — recommendations sharpen the value prop ('impossible lists in minutes' — the live H1) and add a CTA. KD 3 makes 'websets' highly winnable." },
+
+  { slug:"products-search", tier:1, name:"Search product", url:"exa.ai/products/search", h1:"Highest quality search at every latency",
+    primaryKw:"ai web search", primarySrc:"KWR", kd:52, vol:500,
+    currentTitle:"Search | Exa",
+    currentDesc:"Real-time AI search engine with a powerful web search API, web crawling API, SERP API, and deep research tools. Search and extract structured content from websites and live data.",
+    recTitleA:"Exa Search API | AI Web Search Built for Agents & LLMs",
+    recTitleB:"AI Web Search API | Exa's Real-Time Search for Agents",
+    recDescA:"Need AI web search for agents? Exa Search API delivers the highest-quality results at every latency — real-time queries, neural retrieval. ✓ Try free.",
+    recDescB:"The AI web search built for production agents. Exa returns clean, structured results at every latency with neural retrieval and live web data. ✓ Try free.",
+    note:"Biggest meta upgrade on the site — 12 chars to 50+ and a page-specific description (no more inheriting home). Leads with KWR primary 'ai web search' + ties to H1 'Highest quality search at every latency.'" },
+
+  { slug:"products-deep", tier:1, name:"Deep product", url:"exa.ai/products/deep", h1:"Find results for any complex search task",
+    primaryKw:"deep research", primarySrc:"KWR", kd:60, vol:6700,
+    currentTitle:"Deep Search Endpoint | Exa",
+    currentDesc:"Real-time AI search engine with a powerful web search API, web crawling API, SERP API, and deep research tools. Search and extract structured content from websites and live data.",
+    recTitleA:"Exa Deep Research API | AI for Complex Search Tasks",
+    recTitleB:"Deep Research API | AI Web Research at Scale | Exa",
+    recDescA:"Need deep research without hallucinations? Exa Deep Research API runs complex multi-step searches across the live web. ✓ Try the API free.",
+    recDescB:"Find results for any complex search task. Exa Deep Research API combines neural retrieval, browsing, and synthesis into one endpoint. ✓ Try free.",
+    note:"Highest-volume KW in the KWR (vol 6,700) — current title misses it entirely ('Deep Search Endpoint' → 'Deep Research API'). Description specific to the page, not the home default." },
+
+  { slug:"mcp", tier:1, name:"MCP Server", url:"exa.ai/mcp", h1:"Exa MCP Server for AI Web Search",
+    primaryKw:"exa mcp", primarySrc:"KWR", kd:null, vol:1000,
+    currentTitle:"Exa MCP Server — AI Web Search for Claude, Cursor & VS Code",
+    currentDesc:"Give your AI assistant the power of web search. Connect Claude Desktop, Cursor, VS Code and other AI tools to Exa's search, code search, and research tools via MCP. Free and open-source.",
+    recTitleA:"Exa MCP Server | AI Web Search for Claude, Cursor & More",
+    recTitleB:"Exa MCP | Web Search for Claude, Cursor & VS Code",
+    recDescA:"Want to give your AI assistant web search? Connect Claude, Cursor, and VS Code to Exa search, code, and research tools via MCP. ✓ Install free.",
+    recDescB:"Give your AI assistant the power of web search. Exa MCP plugs Claude Desktop, Cursor, and VS Code into real-time search and research. ✓ Install free.",
+    note:"Current title is already strong — recommendations swap the em dash for | and trim length. Description trims 186 → 149/159 and keeps the 'Free, open-source' hook." },
+
+  { slug:"pricing", tier:1, name:"Pricing", url:"exa.ai/pricing", h1:"Start searching for free",
+    primaryKw:"exa api pricing", primarySrc:"KWR", kd:null, vol:150,
+    currentTitle:"API Pricing | Exa",
+    currentDesc:"Explore Exa AI pricing – flexible plans to scale your AI with powerful, real-time web search.",
+    recTitleA:"Exa API Pricing | Pay-as-You-Go Plans for AI Search",
+    recTitleB:"Exa API Pricing | Free Tier, Pay-as-You-Go & Enterprise",
+    recDescA:"What does Exa cost? Pay-as-you-go pricing with a free tier for AI web search, deep research, and Websets. ✓ Try free or talk to sales.",
+    recDescB:"Explore Exa API pricing. Flexible plans for AI web search, deep research, and Websets — free tier to enterprise. ✓ Talk to sales for custom plans.",
+    note:"Current title (17 chars) leaves significant SERP real estate on the table. Description doubles in length and answers the actual search intent ('what does Exa cost')." },
+
+  { slug:"claude", tier:1, name:"Claude plugin", url:"exa.ai/claude", h1:"(verify in browser)",
+    primaryKw:"Exa for Claude / Claude Code deep research plugin", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"Exa in Claude",
+    currentDesc:"A deep research plugin for Claude Code.",
+    recTitleA:"Exa for Claude Code | Deep Research Plugin for AI Agents",
+    recTitleB:"Exa Plugin for Claude Code | Web Search & Deep Research",
+    recDescA:"Want deep research inside Claude Code? The Exa plugin adds real-time web search and multi-step research to your Claude agent. ✓ Install free.",
+    recDescB:"Connect Claude Code to live web data. Exa plugin brings real-time search, deep research, and structured content into every Claude task. ✓ Install free.",
+    note:"Both current fields severely under-spec'd — biggest individual % gain on the site (title 13→55, desc 39→152)." },
+
+  { slug:"about", tier:1, name:"About", url:"exa.ai/about", h1:"The next generation of search",
+    primaryKw:"AI search engine for developers", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"Exa: The Search Engine for Developers & Custom AI Search Solution",
+    currentDesc:"Exa is a powerful search engine for developers, providing a custom search engine for LLMs and other AI applications. Get high-quality, relevant web data with our dedicated AI search solution.",
+    recTitleA:"About Exa | The Web Search Engine Built for Developers",
+    recTitleB:"About Exa Labs | AI Search Engine for Agents & Developers",
+    recDescA:"Who builds Exa? A research-driven team building the web search engine for AI agents and developers — the next generation of LLM-native search. ✓ Try Exa free.",
+    recDescB:"Exa is the next generation of search — a powerful AI search engine for developers, LLMs, and agentic applications. Get high-quality web data. ✓ Try Exa free.",
+    note:"Brings title under 60 and description under 160 (both currently truncate in SERPs). Keeps the 'for developers' anchor." },
+
+  // ─── Tier 2 ───
+  { slug:"customers", tier:2, name:"Customers (index)", url:"exa.ai/customers", h1:"How top teams are using Exa",
+    primaryKw:"Exa case studies / Exa customers", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"Customer Stories | How top teams amplify their products with web search | Exa",
+    currentDesc:"Explore how customers use Exa to create valuable new experiences with unique web data. See real success stories from leading companies.",
+    recTitleA:"Exa Customer Stories | How Top Teams Build with AI Search",
+    recTitleB:"Exa Case Studies | How Top AI Teams Use Web Search",
+    recDescA:"How do top AI teams use Exa? Read case studies from monday.com, HubSpot, Cognition, and more on building with real-time web search. ✓ Talk to sales.",
+    recDescB:"Explore how monday.com, HubSpot, Cognition and other leading teams use Exa to ship AI products faster with real-time web data. ✓ Try Exa free.",
+    note:"Trims 77→57. Replaces vague 'leading companies' with named logos (monday, HubSpot, Cognition) for SERP click-through." },
+
+  { slug:"customers-monday", tier:2, name:"Customer · monday.com", url:"exa.ai/customers/monday", h1:"How monday.com built an agentic lead engine with Exa",
+    primaryKw:"monday.com agentic lead engine", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"monday.com x Exa Case Study",
+    currentDesc:"How monday.com built an agentic lead engine with Exa.",
+    recTitleA:"monday.com Case Study | Agentic Lead Engine Built on Exa",
+    recTitleB:"How monday.com Built an Agentic Lead Engine with Exa",
+    recDescA:"How did monday.com build an agentic lead engine? See how their team uses Exa web search API to surface qualified prospects in real time. ✓ Talk to sales.",
+    recDescB:"monday.com built an agentic lead engine on Exa real-time web search to surface qualified prospects automatically. ✓ Talk to sales for your team.",
+    note:"Pulls the strong page H1 into the title and triples the description length." },
+
+  { slug:"customers-hubspot", tier:2, name:"Customer · HubSpot", url:"exa.ai/customers/hubspot", h1:"HubSpot uses Exa to connect Breeze Assistant and Agents to live web intelligence",
+    primaryKw:"HubSpot Breeze case study / CRM web intelligence", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"HubSpot × Exa Case Study",
+    currentDesc:"HubSpot uses Exa to connect Breeze Assistant and Agents to live web intelligence across CRM workflows.",
+    recTitleA:"HubSpot Case Study | Web Intelligence for Breeze & Agents",
+    recTitleB:"How HubSpot Uses Exa to Power Breeze Assistant & Agents",
+    recDescA:"How does HubSpot Breeze stay current? Their team uses Exa to feed live web intelligence into Breeze Assistant, AI agents, and CRM workflows. ✓ Talk to sales.",
+    recDescB:"HubSpot connects Breeze Assistant and AI agents to live web intelligence across CRM workflows using Exa real-time search API. ✓ Talk to sales.",
+    note:"Title doubles in length; description tweaked to add a question opener + CTA." },
+
+  { slug:"customers-cognition", tier:2, name:"Customer · Cognition", url:"exa.ai/customers/cognition", h1:"How Cognition uses Exa to power web search across their agentic products",
+    primaryKw:"Cognition agentic product web search", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"Cognition x Exa Case Study",
+    currentDesc:"How Cognition uses Exa to power web search capability across their agentic products.",
+    recTitleA:"Cognition Case Study | Web Search for Agentic Products",
+    recTitleB:"Cognition × Exa | Web Search for Agentic AI Products",
+    recDescA:"How does Cognition give its agents web search? Read how they use Exa to power live web capability across their agentic products. ✓ Talk to sales.",
+    recDescB:"Cognition uses Exa to power web search across its agentic products, giving every agent live, structured access to the open web. ✓ Talk to sales today.",
+    note:"Doubles title length, doubles description length." },
+
+  { slug:"integrations", tier:2, name:"Integrations", url:"exa.ai/integrations", h1:"Use Exa search through your favorite frameworks and apps",
+    primaryKw:"Exa integrations / AI search integrations", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"Exa Integrations — Find the Right Tool for Your Stack",
+    currentDesc:"Browse Exa's partner ecosystem. Frameworks, MCP servers, workflow automation, API compatibility, and voice integrations.",
+    recTitleA:"Exa Integrations | Frameworks, MCP Servers & Workflows",
+    recTitleB:"Exa Integrations | LangChain, MCP, n8n, Zapier & More",
+    recDescA:"Which tools work with Exa? Browse 40+ integrations across frameworks, MCP servers, workflow automation, and voice — LangChain, Claude, n8n. ✓ Try Exa free.",
+    recDescB:"Exa integrates with LangChain, Claude, OpenAI, n8n, Zapier, and 40+ frameworks. Connect Exa search to your stack in minutes. ✓ Try the API free.",
+    note:"Names specific partners (LangChain, Claude, n8n) in title B + description for SERP CTR. Per KWR, 43 live integration pages exist underneath." },
+
+  { slug:"demos", tier:2, name:"Demos", url:"exa.ai/demos", h1:"Demos and Tutorials",
+    primaryKw:"Exa demos / web search API examples", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"LLM + Web Search API Demos and Tutorials | Exa",
+    currentDesc:"Built with Exa AI – explore powerful demos and see how to harness the world's smartest web search API. Discover what you can build. Start exploring now!",
+    recTitleA:"Demos & Tutorials | Build with Exa's AI Web Search API",
+    recTitleB:"Exa Demos & Tutorials | Real Web Search API Examples",
+    recDescA:"Want to see what's possible with AI web search? Explore Exa demos — working examples of agents, research tools, and Websets you can clone. ✓ Try Exa free.",
+    recDescB:"Built with Exa — explore working demos and tutorials for the world's smartest AI web search API. See what you can build. ✓ Try Exa free.",
+    note:"Current is already in range — recommendations tighten phrasing and add a clearer CTA." },
+
+  // ─── Tier 3 ───
+  { slug:"blog", tier:3, name:"Blog", url:"exa.ai/blog", h1:"Exa Blog (varies — index)",
+    primaryKw:"Exa blog / AI search blog", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"Exa AI Research Blog",
+    currentDesc:"Discover the latest in AI research and semantic search technology on the Exa blog. Learn how our neural network search engine provides high-quality web data for AI applications",
+    recTitleA:"Exa Blog | AI Web Search, Neural Retrieval & Agent Research",
+    recTitleB:"The Exa Blog | Research on AI Search & Semantic Retrieval",
+    recDescA:"What's new in AI search? Read the latest from Exa on neural search, semantic retrieval, web data for LLMs, and the future of AI-native search. ✓ Try Exa free.",
+    recDescB:"Discover the latest in AI research and semantic search technology on the Exa blog. Neural search, agent retrieval, and web data for LLMs. ✓ Try Exa free.",
+    note:"Title triples (20→60). Description trims 176→152." },
+
+  { slug:"research", tier:3, name:"Research", url:"exa.ai/research", h1:"Research at the frontier of web search",
+    primaryKw:"Exa research / search engine research", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"Exa Research | Technical Blog on Search & AI Infrastructure",
+    currentDesc:"Technical deep dives from the Exa engineering team on building large-scale search infrastructure, embedding models, and vector databases.",
+    recTitleA:"Exa Research | Technical Deep Dives on AI Search Systems",
+    recTitleB:"Exa Research | Embeddings, Vector Search & AI Infrastructure",
+    recDescA:"Curious how Exa builds search at scale? Deep dives from the Exa engineering team on embedding models, vector databases, and retrieval. ✓ Try Exa free.",
+    recDescB:"Technical deep dives from the Exa team on building large-scale neural search infrastructure, embedding models, and vector databases. ✓ Try Exa free.",
+    note:"Current is already solid — recommendations refine wording for SERP click intent and add a CTA." },
+
+  { slug:"partners", tier:3, name:"Partners", url:"exa.ai/partners", h1:"Search is being rebuilt, Build it with us",
+    primaryKw:"Exa partner program", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"Partner with Exa — Accelerate Your Growth",
+    currentDesc:"Join a global community of partners to build solutions and skills, market your company and offerings, and co-sell with Exa.",
+    recTitleA:"Exa Partner Program | Build, Market & Co-Sell with Exa",
+    recTitleB:"Become an Exa Partner | Join the AI Search Ecosystem",
+    recDescA:"Want to grow with the leading AI search platform? Join the Exa partner program to build solutions, co-market, and co-sell with Exa. ✓ Apply today.",
+    recDescB:"Join the Exa partner program to build solutions, market your offerings, and co-sell with the leading AI web search platform. ✓ Apply to partner.",
+    note:"Replaces vague 'Accelerate Your Growth' with 'Partner Program' — clearer SERP intent for people searching for partnership opportunities." },
+
+  { slug:"security", tier:3, name:"Security", url:"exa.ai/security", h1:"Exa Labs Vulnerability Disclosure Policy",
+    primaryKw:"Exa security / vulnerability disclosure", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"Exa Labs Vulnerability Disclosure Policy",
+    currentDesc:"Security is essential to Exa Labs' mission. Learn about our Vulnerability Disclosure Policy and bug bounty program.",
+    recTitleA:"Exa Security | Vulnerability Disclosure & Bug Bounty Policy",
+    recTitleB:"Security at Exa Labs | Vulnerability Disclosure Program",
+    recDescA:"Found a security issue at Exa? Read our Vulnerability Disclosure Policy, scope, and bug bounty program. ✓ Report responsibly to security@exa.ai.",
+    recDescB:"Security is essential to Exa Labs' mission. Read our Vulnerability Disclosure Policy, reporting guidelines, and bug bounty program. ✓ Get in touch.",
+    note:"Adds 'Security' to the title (currently missing — only 'Vulnerability Disclosure Policy'). Description gains a clear CTA for actual reporters." },
+
+  { slug:"evals", tier:3, name:"Evals", url:"exa.ai/evals", h1:"Evals at Exa",
+    primaryKw:"AI search evals / search quality benchmarks", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"Evals at Exa | Search Quality Benchmarks & Evaluation",
+    currentDesc:"How Exa measures and maintains state-of-the-art search quality for LLMs through rigorous evaluation and benchmarking.",
+    recTitleA:"Exa Evals | AI Search Quality Benchmarks & Methodology",
+    recTitleB:"Exa Evals | How We Measure AI Search Quality at Scale",
+    recDescA:"How do you benchmark AI search quality? Learn how Exa measures state-of-the-art retrieval through rigorous evals for LLM use. ✓ Try Exa free and see.",
+    recDescB:"Learn how Exa measures search quality for LLMs through rigorous evaluation, benchmarks, and head-to-head comparisons. ✓ Try Exa free.",
+    note:"Current title is OK — recommendations swap 'Evals at Exa' for 'Exa Evals' (better brand prefix). Description tightened." },
+
+  { slug:"careers", tier:3, name:"Careers", url:"exa.ai/careers", h1:"Come build the best search engine in the world",
+    primaryKw:"Exa careers / AI search engineer jobs", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"Careers",
+    currentDesc:"Foundation Models for Search",
+    recTitleA:"Careers at Exa | Build the Best Search Engine in the World",
+    recTitleB:"Exa Careers | AI Search Engineer & Foundation Model Jobs",
+    recDescA:"Want to build the best search engine in the world? Join Exa's engineering team and work on foundation models, neural retrieval, and AI agents. ✓ See roles.",
+    recDescB:"Come build the best search engine in the world. Open roles at Exa across foundation models, search infrastructure, and AI product engineering. ✓ Apply now.",
+    note:"Biggest title gain on the site (7→58). Pulls the page H1 ('Come build the best search engine in the world') into the description." },
+
+  { slug:"contact-sales", tier:3, name:"Contact Sales", url:"exa.ai/contact/sales", h1:"Talk to us for a custom demo",
+    primaryKw:"Exa sales / enterprise AI search demo", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"Contact Exa Sales | Enterprise AI Search Demos & Pricing",
+    currentDesc:"Talk to Exa sales for a custom demo, enterprise plans, and pricing for our AI search API and Websets products.",
+    recTitleA:"Contact Exa Sales | Enterprise AI Search Demos & Pricing",
+    recTitleB:"Contact Exa Sales | Custom Demos & Enterprise Plans",
+    recDescA:"Need enterprise AI search? Talk to Exa sales for a custom demo, volume pricing, and onboarding for our search API and Websets. ✓ Book a call.",
+    recDescB:"Talk to Exa sales for a custom demo, enterprise plans, and pricing for our AI search API and Websets. ✓ Get in touch with our team today.",
+    note:"Current title is already strong (recommend keeping as Option A). Description gains a question opener + CTA." },
+
+  { slug:"contact", tier:3, name:"Contact (root)", url:"exa.ai/contact", h1:"(verify in browser)",
+    primaryKw:"Contact Exa / Exa support", primarySrc:"Inferred", kd:null, vol:null,
+    currentTitle:"Contact Exa AI: Your Enterprise AI Web Search Engine | Support, Sales, & Press",
+    currentDesc:"Need help? Connect with Exa AI sales or support for demos, onboarding, product questions, or tailored solutions. We're here to get you started—reach out today!",
+    recTitleA:"Contact Exa | Support, Sales & Partnerships for AI Search",
+    recTitleB:"Contact Us | Exa Sales, Support & Press Inquiries",
+    recDescA:"Need help? Connect with Exa for demos, onboarding, support, or press inquiries on our AI web search API and Websets. ✓ Reach out today.",
+    recDescB:"Connect with Exa AI sales, support, or press for demos, onboarding, product questions, or tailored solutions. ✓ Get started today.",
+    note:"Trims title from 78 (truncates in SERPs) to ~50–57. Description already starts with a question — kept that pattern." }
+];
+
+/* helpers */
+function $(s,r){return (r||document).querySelector(s);}
+function $all(s,r){return Array.from((r||document).querySelectorAll(s));}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function ccClass(len, lo, hi){
+  if (len < lo) return 'bad';
+  if (len > hi) return 'warn';
+  return 'ok';
+}
+function ccTitle(len){ return ccClass(len, 30, 60); }
+function ccDesc(len){ return ccClass(len, 120, 160); }
+
+var current = 'overview';
+
+/* ── Supabase review state ─────────────────────────────────────── */
+var SUPA_URL = 'https://hxehdymxabexhydpjzwn.supabase.co';
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4ZWhkeW14YWJleGh5ZHBqenduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NDU1ODYsImV4cCI6MjA5NjUyMTU4Nn0.vHqaCa1xFQTu1FYl_WlNt_AU0Y0lbZvkhB-covyGVmo';
+var DELIVERABLE = 'exa-metadata';
+var REVIEW_FIELDS = ['titleA','descA','titleB','descB']; // four reviewable fields per page
+var BY_SLUG = {}; DATA.forEach(function(p){ BY_SLUG[p.slug] = p; });
+
+var supa = null;
+try { if (window.supabase) supa = window.supabase.createClient(SUPA_URL, SUPA_KEY); }
+catch (e) { console.warn('supabase init failed', e); }
+
+// STATE[slug] = { review: { titleA: {status,note}, ... } }
+var STATE = {};
+function stState(slug){ if (!STATE[slug]) STATE[slug] = { review: {} }; return STATE[slug]; }
+
+async function loadAllReviews(){
+  if (!supa) return;
+  try {
+    var r = await supa.from('keyword_reviews').select('theme_id,status,page_type').eq('deliverable', DELIVERABLE);
+    (r.data || []).forEach(function(row){
+      var parts = (row.theme_id || '').split('::');
+      var slug = parts[0], id = parts[1];
+      if (!slug || !id || !BY_SLUG[slug]) return;
+      if (id.indexOf('rv-') === 0){
+        stState(slug).review[id.slice(3)] = { status: row.status || '', note: row.page_type || '' };
+      }
+    });
+  } catch (e) { console.warn('loadAllReviews', e); }
+}
+
+var REST = SUPA_URL + '/rest/v1/keyword_reviews?on_conflict=deliverable,theme_id';
+var pending = {}, saveT = {};
+function save(slug, field, status, note, debounce){
+  var key = slug + '::rv-' + field;
+  pending[key] = {
+    deliverable: DELIVERABLE,
+    theme_id: key,
+    status: status,
+    page_type: note || '',
+    updated_at: new Date().toISOString()
+  };
+  clearTimeout(saveT[key]);
+  saveT[key] = setTimeout(function(){ commit(key); }, debounce || 0);
+}
+function commit(key){
+  if (!pending[key]) return;
+  var body = pending[key];
+  delete pending[key];
+  try {
+    fetch(REST, {
+      method: 'POST',
+      keepalive: true,
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify(body)
+    });
+  } catch (e) { console.warn('commit', e); }
+}
+
+// Realtime: cross-tab + cross-user updates
+try {
+  if (supa) supa.channel('exa-' + DELIVERABLE)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'keyword_reviews', filter: 'deliverable=eq.' + DELIVERABLE }, function(p){
+      var row = p['new'] || p.old || {};
+      var parts = (row.theme_id || '').split('::');
+      var slug = parts[0], id = parts[1];
+      if (!slug || !id || !BY_SLUG[slug] || id.indexOf('rv-') !== 0) return;
+      var field = id.slice(3);
+      stState(slug).review[field] = (p.eventType === 'DELETE')
+        ? { status: '', note: '' }
+        : { status: row.status || '', note: row.page_type || '' };
+      if (slug === current) applyReviews();
+      renderSidebar(); // update sidebar pills
+    }).subscribe();
+} catch (e) { console.warn('realtime', e); }
+
+function reviewBarHTML(field, label){
+  return '<div class="review" data-edit="'+field+'">'+
+    '<div class="rv-row">'+
+      '<span class="rv-lbl">'+esc(label)+'</span>'+
+      '<button class="rv-btn rv-approve" data-s="approve">✓ Approve</button>'+
+      '<button class="rv-btn rv-reject" data-s="reject">✎ Request edits</button>'+
+      '<span class="rv-saved">saved ✓</span>'+
+      '<span class="rv-status" data-st=""></span>'+
+    '</div>'+
+    '<textarea class="rv-fb" placeholder="Comment on this option (optional)…"></textarea>'+
+  '</div>';
+}
+function wireReviewBars(root){
+  $all('.review', root).forEach(function(bar){
+    var field = bar.getAttribute('data-edit');
+    $all('.rv-btn', bar).forEach(function(b){
+      b.addEventListener('click', function(){
+        var s = stState(current).review[field] || { status:'', note:'' };
+        s.status = (s.status === b.dataset.s) ? '' : b.dataset.s;
+        stState(current).review[field] = s;
+        save(current, field, s.status, s.note || '');
+        applyReviews();
+        flash(bar);
+      });
+    });
+    var fb = $('.rv-fb', bar);
+    if (fb){
+      fb.addEventListener('input', function(){
+        var s = stState(current).review[field] || { status:'', note:'' };
+        s.note = fb.value;
+        stState(current).review[field] = s;
+        save(current, field, s.status || '', fb.value, 400);
+      });
+      fb.addEventListener('blur', function(){
+        var key = current + '::rv-' + field;
+        clearTimeout(saveT[key]); commit(key); flash(bar);
+      });
+    }
+  });
+}
+function flash(bar){
+  var s = $('.rv-saved', bar);
+  if (s){ s.classList.add('show'); setTimeout(function(){ s.classList.remove('show'); }, 1100); }
+}
+function applyReviews(){
+  var rv = stState(current).review;
+  $all('.review').forEach(function(bar){
+    var field = bar.getAttribute('data-edit');
+    var r = rv[field] || { status:'', note:'' };
+    $all('.rv-btn', bar).forEach(function(b){ b.classList.toggle('on', b.dataset.s === r.status); });
+    bar.classList.toggle('is-approved', r.status === 'approve');
+    bar.classList.toggle('is-rejected', r.status === 'reject');
+    var stt = $('.rv-status', bar);
+    if (stt){
+      stt.setAttribute('data-st', r.status);
+      stt.textContent = r.status === 'approve' ? 'Approved' : (r.status === 'reject' ? 'Needs edits' : '');
+    }
+    var fb = $('.rv-fb', bar);
+    if (fb && document.activeElement !== fb) fb.value = r.note || '';
+  });
+  updateReviewCount();
+}
+function updateReviewCount(){
+  var p = BY_SLUG[current]; if (!p) return;
+  var rv = stState(current).review;
+  var approved = REVIEW_FIELDS.filter(function(f){ return (rv[f] || {}).status === 'approve'; }).length;
+  var pill = document.getElementById('rvCount');
+  if (pill){
+    pill.textContent = approved + '/' + REVIEW_FIELDS.length;
+    pill.classList.toggle('zero', approved === 0);
+  }
+}
+
+/* sidebar */
+function renderSidebar(){
+  // overview entry
+  $('#sbList-ov').innerHTML =
+    '<div class="sb-item'+(current==='overview'?' active':'')+'" data-slug="overview">'+
+      '<span class="sb-star">✦</span><span>Overview · Methodology</span>'+
+    '</div>';
+  // tiered pages
+  ['t1','t2','t3'].forEach(function(t){
+    var tierNum = parseInt(t.charAt(1));
+    var html = '';
+    DATA.filter(function(p){ return p.tier === tierNum; }).forEach(function(p){
+      var pill = '<span class="pill pill-'+t+'">T'+tierNum+'</span>';
+      html += '<div class="sb-item'+(p.slug===current?' active':'')+'" data-slug="'+p.slug+'">'+
+        '<span>'+esc(p.name)+'</span>'+pill+'</div>';
+    });
+    $('#sbList-'+t).innerHTML = html;
+  });
+  $all('.sb-item').forEach(function(el){
+    el.addEventListener('click', function(){ go(el.dataset.slug); });
+  });
+}
+
+/* header */
+function renderHeader(p){
+  $('#hTitle').textContent = p.name + ' — Tier ' + p.tier;
+  var kdVol = '';
+  if (p.kd != null || p.vol != null){
+    var parts = [];
+    if (p.kd != null) parts.push('KD ' + p.kd);
+    if (p.vol != null) parts.push('vol ' + p.vol.toLocaleString());
+    kdVol = ' <span style="color:#6f6a64">('+parts.join(' · ')+')</span>';
+  }
+  var srcPill = '<span class="ph-pill '+(p.primarySrc==='KWR'?'kwr':'inf')+'">'+esc(p.primarySrc)+'</span>';
+  var tierPill = '<span class="ph-pill t'+p.tier+'">Tier '+p.tier+'</span>';
+  $('#hMeta').innerHTML =
+    '<span>Primary keyword <strong>'+esc(p.primaryKw)+'</strong>'+srcPill+kdVol+'</span>'+
+    '<span>URL <strong>'+esc(p.url)+'</strong></span>'+
+    '<span>Tier '+tierPill+'</span>'+
+    '<span>Reviewed <span class="ph-pill rv zero" id="rvCount">0/4</span></span>';
+}
+
+/* compare panel */
+function renderCompare(p){
+  var ctl = p.currentTitle.length, cdl = p.currentDesc.length;
+  var aTl = p.recTitleA.length, aDl = p.recDescA.length;
+  var bTl = p.recTitleB.length, bDl = p.recDescB.length;
+
+  var html = ''+
+    '<div class="meta-card">'+
+      '<div class="meta-card-header"><span>◆ Page brief</span><span class="mch-sub">'+esc(p.url)+'</span></div>'+
+      '<table class="meta-table">'+
+        '<tr><td>URL</td><td><span class="mono">'+esc(p.url)+'</span></td></tr>'+
+        '<tr><td>Primary keyword</td><td><span class="kbadge '+(p.primarySrc==='KWR'?'kwr':'inf')+'">'+esc(p.primaryKw)+'</span> <span class="charcount">source: '+esc(p.primarySrc)+(p.kd!=null?' · KD '+p.kd:'')+(p.vol!=null?' · vol '+p.vol.toLocaleString():'')+'</span></td></tr>'+
+      '</table>'+
+    '</div>'+
+
+    '<div class="meta-card">'+
+      '<div class="meta-card-header"><span>◆ Current (live)</span><span class="mch-sub">what\'s on the page now</span></div>'+
+      '<table class="meta-table">'+
+        '<tr><td>Title tag</td><td><span class="opt-label opt-cur">CURRENT</span>'+esc(p.currentTitle)+'<span class="charcount '+ccTitle(ctl)+'">'+ctl+' chars</span></td></tr>'+
+        '<tr><td>Meta description</td><td><span class="opt-label opt-cur">CURRENT</span>'+esc(p.currentDesc)+'<span class="charcount '+ccDesc(cdl)+'">'+cdl+' chars</span></td></tr>'+
+      '</table>'+
+    '</div>'+
+
+    '<div class="meta-card">'+
+      '<div class="meta-card-header"><span>◆ Recommended · Option A</span><span class="mch-sub">keyword-first · best for ranking</span></div>'+
+      '<table class="meta-table">'+
+        '<tr><td>Title tag</td><td><span class="opt-label opt-A">REC A</span>'+esc(p.recTitleA)+'<span class="charcount '+ccTitle(aTl)+'">'+aTl+' chars</span></td></tr>'+
+      '</table>'+
+      reviewBarHTML('titleA','Review Title A')+
+      '<table class="meta-table">'+
+        '<tr><td>Meta description</td><td><span class="opt-label opt-A">REC A</span>'+esc(p.recDescA)+'<span class="charcount '+ccDesc(aDl)+'">'+aDl+' chars</span></td></tr>'+
+      '</table>'+
+      reviewBarHTML('descA','Review Description A')+
+    '</div>'+
+
+    '<div class="meta-card">'+
+      '<div class="meta-card-header"><span>◆ Recommended · Option B</span><span class="mch-sub">click-first · best for CTR</span></div>'+
+      '<table class="meta-table">'+
+        '<tr><td>Title tag</td><td><span class="opt-label opt-B">REC B</span>'+esc(p.recTitleB)+'<span class="charcount '+ccTitle(bTl)+'">'+bTl+' chars</span></td></tr>'+
+      '</table>'+
+      reviewBarHTML('titleB','Review Title B')+
+      '<table class="meta-table">'+
+        '<tr><td>Meta description</td><td><span class="opt-label opt-B">REC B</span>'+esc(p.recDescB)+'<span class="charcount '+ccDesc(bDl)+'">'+bDl+' chars</span></td></tr>'+
+      '</table>'+
+      reviewBarHTML('descB','Review Description B')+
+    '</div>'+
+
+    '<div class="draft-hint"><b>Notes:</b> '+esc(p.note)+'</div>';
+
+  $('#panelCompare').innerHTML = html;
+  wireReviewBars($('#panelCompare'));
+  applyReviews();
+}
+
+/* SERP preview panel */
+function serpResult(p, titleStr, descStr){
+  var truncTitle = '';
+  if (titleStr.length > 60) truncTitle = '<div class="serp-trunc-hint">⚠ Title is '+titleStr.length+' chars — Google will likely truncate around 60.</div>';
+  var truncDesc = '';
+  if (descStr.length > 160) truncDesc = '<div class="serp-trunc-hint">⚠ Description is '+descStr.length+' chars — Google may truncate around 160.</div>';
+  var siteName = 'Exa';
+  var initial = 'E';
+  return ''+
+    '<div class="serp-result">'+
+      '<div class="serp-fav">'+
+        '<div class="favico">'+initial+'</div>'+
+        '<div class="site"><div class="name">'+siteName+'</div><div class="url">https://'+esc(p.url)+'</div></div>'+
+      '</div>'+
+      '<div class="serp-title">'+esc(titleStr)+'</div>'+
+      '<div class="serp-desc">'+esc(descStr)+'</div>'+
+      truncTitle + truncDesc +
+    '</div>';
+}
+
+function renderSerp(p){
+  var html = ''+
+    '<div class="serp-stage">'+
+      '<div class="serp-note">Mockup approximation of how each title + description renders in the Google SERP. Truncation warnings flag fields likely to get cut. Brand favicon shown as the first letter of Exa.</div>'+
+
+      '<div class="serp-paper cur">'+
+        '<div class="serp-paper-lbl"><span class="dot"></span> Current (live)</div>'+
+        serpResult(p, p.currentTitle, p.currentDesc) +
+      '</div>'+
+
+      '<div class="serp-paper recA">'+
+        '<div class="serp-paper-lbl"><span class="dot"></span> Recommended · Option A (keyword-first)</div>'+
+        serpResult(p, p.recTitleA, p.recDescA) +
+      '</div>'+
+
+      '<div class="serp-paper recB">'+
+        '<div class="serp-paper-lbl"><span class="dot"></span> Recommended · Option B (click-first)</div>'+
+        serpResult(p, p.recTitleB, p.recDescB) +
+      '</div>'+
+    '</div>';
+  $('#panelSerp').innerHTML = html;
+}
+
+/* overview panel */
+function renderOverview(){
+  var kwrPages = DATA.filter(function(p){ return p.primarySrc === 'KWR'; });
+  var infCount = DATA.filter(function(p){ return p.primarySrc === 'Inferred'; }).length;
+  var t1 = DATA.filter(function(p){ return p.tier === 1; }).length;
+  var t2 = DATA.filter(function(p){ return p.tier === 2; }).length;
+  var t3 = DATA.filter(function(p){ return p.tier === 3; }).length;
+
+  var kwrRows = kwrPages.map(function(p){
+    var kdVol = '';
+    if (p.kd != null) kdVol += 'KD ' + p.kd;
+    if (p.vol != null) kdVol += (kdVol ? ' · ' : '') + 'vol ' + p.vol.toLocaleString();
+    return '<tr>'+
+      '<td>'+esc(p.name)+'</td>'+
+      '<td><span class="mono">'+esc(p.url)+'</span></td>'+
+      '<td><b>'+esc(p.primaryKw)+'</b></td>'+
+      '<td>'+esc(kdVol || '—')+'</td>'+
+    '</tr>';
+  }).join('');
+
+  var html = ''+
+    '<div class="ov-section">'+
+      '<div class="lead">'+
+        '<b>What this site is.</b> A page-by-page audit of Exa\'s 22 core marketing pages with two title-tag and two meta-description candidates per field. Every recommendation is character-counted against SERP-truncation targets and grounded in either Exa\'s own keyword research or, where no theme exists yet, the page\'s H1 + intent.'+
+      '</div>'+
+
+      '<div class="stat-row">'+
+        '<div class="stat"><div class="lbl">Pages audited</div><div class="val">22</div><div class="sub">core marketing &amp; product pages</div></div>'+
+        '<div class="stat"><div class="lbl">Candidates per page</div><div class="val">4</div><div class="sub">2 titles · 2 descriptions</div></div>'+
+        '<div class="stat"><div class="lbl">KWR-mapped</div><div class="val">'+kwrPages.length+'</div><div class="sub">primary kw pulled from keyword research</div></div>'+
+        '<div class="stat"><div class="lbl">Inferred</div><div class="val">'+infCount+'</div><div class="sub">brand/support pages, kw inferred from page</div></div>'+
+      '</div>'+
+      '<div class="stat-row">'+
+        '<div class="stat"><div class="lbl">Tier 1</div><div class="val">'+t1+'</div><div class="sub">Conversion-driving product &amp; marketing</div></div>'+
+        '<div class="stat"><div class="lbl">Tier 2</div><div class="val">'+t2+'</div><div class="sub">Customer proof + integration discovery</div></div>'+
+        '<div class="stat"><div class="lbl">Tier 3</div><div class="val">'+t3+'</div><div class="sub">Company / support / secondary</div></div>'+
+      '</div>'+
+    '</div>'+
+
+    '<div class="ov-section">'+
+      '<h2>The process</h2>'+
+      '<ol class="ov-process">'+
+        '<li><b>Page identification.</b> Crawled exa.ai navigation + footer for every primary marketing page. Validated the list against a 266-URL Screaming Frog crawl, then added <code class="mono" style="font-family:JetBrains Mono;font-size:12px">/claude</code> and <code class="mono" style="font-family:JetBrains Mono;font-size:12px">/contact</code> surfaced by SF that weren\'t in the original list.</li>'+
+        '<li><b>Current state capture.</b> Pulled the live <code class="mono" style="font-family:JetBrains Mono;font-size:12px">&lt;title&gt;</code> and <code class="mono" style="font-family:JetBrains Mono;font-size:12px">&lt;meta name="description"&gt;</code> for every page in scope, cross-checked against the Screaming Frog crawl, and captured <code class="mono" style="font-family:JetBrains Mono;font-size:12px">/websets</code> manually since it lives on a separate subdomain.</li>'+
+        '<li><b>Keyword mapping.</b> Primary keyword pulled from the Exa keyword research doc when present (6 pages — extracted from the embedded <code class="mono" style="font-family:JetBrains Mono;font-size:12px">const PAGES = [...]</code> array on <a href="https://exa-keyword-research.vercel.app" target="_blank">exa-keyword-research.vercel.app</a>). Otherwise inferred from the page H1 + Exa\'s own <code class="mono" style="font-family:JetBrains Mono;font-size:12px">&lt;meta name="keywords"&gt;</code> tag (16 pages).</li>'+
+        '<li><b>Tier assignment.</b> Every page slotted into one of three tiers based on its role in the buying journey — conversion driver, social proof / discovery, or brand &amp; support.</li>'+
+        '<li><b>Recommendation drafting.</b> Two title candidates (A / B) and two description candidates (A / B) per page, every field character-counted against the SERP truncation targets and following the patterns below.</li>'+
+      '</ol>'+
+    '</div>'+
+
+    '<div class="ov-section">'+
+      '<h2>Tier definitions</h2>'+
+      '<div class="ov-source-grid">'+
+        '<div class="ov-source"><div class="src-t" style="color:#1a5c2a">Tier 1 — '+t1+' pages</div><div class="src-n">Conversion drivers</div><div class="src-d">Product &amp; marketing pages that directly drive sign-ups, API usage, and demos. Highest revenue leverage. Optimize first.</div></div>'+
+        '<div class="ov-source"><div class="src-t" style="color:#4a1a7a">Tier 2 — '+t2+' pages</div><div class="src-n">Proof &amp; discovery</div><div class="src-d">Customer case studies + integration discovery pages that support the sales motion. Highly visible in mid-funnel research.</div></div>'+
+        '<div class="ov-source"><div class="src-t" style="color:var(--text-subtle)">Tier 3 — '+t3+' pages</div><div class="src-n">Company &amp; support</div><div class="src-d">Brand, careers, security, contact, blog index — lower SEO priority but still worth a quick rewrite where titles/descriptions are clearly broken.</div></div>'+
+      '</div>'+
+    '</div>'+
+
+    '<div class="ov-section">'+
+      '<h2>Methodology</h2>'+
+
+      '<h3>Character targets</h3>'+
+      '<div class="ov-pattern">'+
+        '<div class="pt-l">Title tag</div>'+
+        '<div class="pt-rule">50–60 characters</div>'+
+        '<div class="pt-d">Google typically truncates titles around ~580px (≈60 chars). Under 50 leaves SERP real estate on the table.</div>'+
+      '</div>'+
+      '<div class="ov-pattern">'+
+        '<div class="pt-l">Meta description</div>'+
+        '<div class="pt-rule">140–160 characters</div>'+
+        '<div class="pt-d">Truncates around ~920px (≈160 chars). Under 140 reads as thin and Google often rewrites it.</div>'+
+      '</div>'+
+
+      '<h3>Title pattern</h3>'+
+      '<ul>'+
+        '<li><b>Primary keyword at or near the start</b> — best for ranking signal and SERP scan-ability.</li>'+
+        '<li><b>Brand suffix on the right</b> (<code class="mono" style="font-family:JetBrains Mono;font-size:12px">Exa | ...</code>) — matches Exa\'s existing convention across the site.</li>'+
+        '<li><b>Title Case</b> — matches Exa\'s existing convention. No clickbait, no all-caps.</li>'+
+        '<li><b>One pipe separator</b> per title. Em dashes (—) reserved for hooks that need a beat.</li>'+
+      '</ul>'+
+
+      '<h3>Description pattern — the four beats</h3>'+
+      '<div class="ov-pattern">'+
+        '<div class="pt-l">Structure</div>'+
+        '<div class="pt-rule">Question opener → Page/product info → ✓ proof point → Soft CTA</div>'+
+        '<div class="pt-d">Every recommended description follows this 4-beat shape. The question pulls the reader\'s intent, the body delivers, the ✓ acts as a credibility flag, the CTA closes.</div>'+
+      '</div>'+
+
+      '<h3>A vs B framework</h3>'+
+      '<div class="ov-ab">'+
+        '<div class="ov-ab-card a"><h4><span class="badge">A</span> Keyword-first</h4><p>Leads with the primary keyword in exact-match or near-match position. Best when ranking matters most — typically the Tier 1 product pages where the keyword has strong search volume.</p></div>'+
+        '<div class="ov-ab-card b"><h4><span class="badge">B</span> Click-first</h4><p>Leads with a hook, identifier, or named entity (e.g. "How monday.com Built…"). Better for case studies, careers, and contact pages where CTR matters more than exact ranking.</p></div>'+
+      '</div>'+
+    '</div>'+
+
+    '<div class="ov-section">'+
+      '<h2>KWR-mapped pages (6)</h2>'+
+      '<p>Primary keyword pulled directly from the Exa keyword research doc. These six are the highest-confidence picks — KD and search volume are from the KWR tab.</p>'+
+      '<table class="ov-kwr-tbl">'+
+        '<thead><tr><th>Page</th><th>URL</th><th>Primary keyword</th><th>KD · Volume</th></tr></thead>'+
+        '<tbody>'+kwrRows+'</tbody>'+
+      '</table>'+
+      '<div class="ov-callout">'+
+        '<div class="ico">ℹ</div>'+
+        '<div>The KWR doc also defines themes for two templated cohorts (the <b>/versus/[competitor]</b> comparisons and <b>/integrations/[partner]</b> integration pages) plus nine new pages that don\'t exist yet (articles, solutions, comparisons). Those sit outside this audit\'s scope and can be added in a follow-up.</div>'+
+      '</div>'+
+    '</div>'+
+
+    '<div class="ov-section">'+
+      '<h2>Inferred-keyword pages ('+infCount+')</h2>'+
+      '<p>These pages don\'t have a theme in the KWR doc — typically because they\'re brand, support, or content pages rather than SEO targets. Their primary keyword is inferred from three signals:</p>'+
+      '<ul>'+
+        '<li>The page\'s live <code class="mono" style="font-family:JetBrains Mono;font-size:12px">&lt;h1&gt;</code></li>'+
+        '<li>Exa\'s own <code class="mono" style="font-family:JetBrains Mono;font-size:12px">&lt;meta name="keywords"&gt;</code> tag</li>'+
+        '<li>The page\'s position in the funnel and obvious user intent</li>'+
+      '</ul>'+
+      '<div class="ov-callout">'+
+        '<div class="ico">⚠</div>'+
+        '<div><b>Worth a quick eyeball pass before lock.</b> The inferred primary is best-guess, not research-backed. Flag anything that should be recast and we\'ll redraft the recommendations to match.</div>'+
+      '</div>'+
+    '</div>'+
+
+    '<div class="ov-section">'+
+      '<h2>Highest-leverage rewrites</h2>'+
+      '<p>The five biggest jumps from current state to recommendation — worth tackling first regardless of tier:</p>'+
+      '<ol class="ov-process">'+
+        '<li><b><a href="#" data-go="careers">/careers</a></b> — current title is 7 chars ("Careers"), current description is 28 chars ("Foundation Models for Search"). Recommendation triples both fields and pulls in the H1 ("Come build the best search engine in the world").</li>'+
+        '<li><b><a href="#" data-go="claude">/claude</a></b> — current title 13 chars, current description 39 chars. Massive SERP real estate left empty for a high-distribution Claude Code surface.</li>'+
+        '<li><b><a href="#" data-go="products-search">/products/search</a></b> — current title is 12 chars ("Search | Exa") and the description duplicates the homepage. Recommendation gives the page its own identity around <code class="mono" style="font-family:JetBrains Mono;font-size:12px">ai web search</code>.</li>'+
+        '<li><b><a href="#" data-go="products-deep">/products/deep</a></b> — description duplicates homepage; current title misses <code class="mono" style="font-family:JetBrains Mono;font-size:12px">deep research</code> (KWR vol 6,700). Recommendation captures both.</li>'+
+        '<li><b>Customer case studies</b> (<a href="#" data-go="customers-monday">monday</a>, <a href="#" data-go="customers-hubspot">HubSpot</a>, <a href="#" data-go="customers-cognition">Cognition</a>) — short, generic titles and one-line descriptions. Recommendations double or triple both fields and pull the specific value prop into the headline.</li>'+
+      '</ol>'+
+    '</div>'+
+
+    '<div class="ov-section">'+
+      '<h2>Data sources</h2>'+
+      '<div class="ov-source-grid">'+
+        '<div class="ov-source"><div class="src-t">Source 1</div><div class="src-n">Live curl + HTML extraction</div><div class="src-d">Fetched 19/21 original pages live. Parsed raw <code class="mono" style="font-family:JetBrains Mono;font-size:12px">&lt;title&gt;</code> + <code class="mono" style="font-family:JetBrains Mono;font-size:12px">&lt;meta&gt;</code> tags. Highest fidelity for SSR pages.</div></div>'+
+        '<div class="ov-source"><div class="src-t">Source 2</div><div class="src-n">Screaming Frog crawl</div><div class="src-d">266-URL crawl provided as <code class="mono" style="font-family:JetBrains Mono;font-size:12px">page_titles_all.csv</code> + <code class="mono" style="font-family:JetBrains Mono;font-size:12px">meta_description_all.csv</code>. Cross-validated all curl fetches and added <code class="mono" style="font-family:JetBrains Mono;font-size:12px">/claude</code> + <code class="mono" style="font-family:JetBrains Mono;font-size:12px">/contact</code> to scope.</div></div>'+
+        '<div class="ov-source"><div class="src-t">Source 3</div><div class="src-n">Browser View Source</div><div class="src-d">Used to capture <code class="mono" style="font-family:JetBrains Mono;font-size:12px">/websets</code>, which lives on the <code class="mono" style="font-family:JetBrains Mono;font-size:12px">websets.exa.ai</code> subdomain.</div></div>'+
+        '<div class="ov-source"><div class="src-t">Source 4</div><div class="src-n">Exa KWR doc</div><div class="src-d">Primary keyword themes extracted from the embedded <code class="mono" style="font-family:JetBrains Mono;font-size:12px">const PAGES = [...]</code> JS array on <a href="https://exa-keyword-research.vercel.app" target="_blank">exa-keyword-research.vercel.app</a>. Covers the 6 KWR-mapped product pages.</div></div>'+
+      '</div>'+
+    '</div>'+
+
+    '<div class="ov-section">'+
+      '<h2>Open items before lock</h2>'+
+      '<ol>'+
+        '<li><b><a href="#" data-go="claude">/claude</a> tier confirmation.</b> Placed in Tier 1 as a product-distribution surface, but could equally land in Tier 2 next to Integrations.</li>'+
+        '<li><b>Inferred-keyword eyeball pass.</b> All 16 inferred primaries should be sanity-checked before the recommendations are locked.</li>'+
+        '<li><b>Per-card review state.</b> Approve / Request edits / Comment functionality is ready to wire up once Supabase credentials are available.</li>'+
+      '</ol>'+
+    '</div>'+
+
+    '';
+
+  $('#panelOverview').innerHTML = html;
+
+  // wire deep-link hops from the Highest-leverage section
+  $all('#panelOverview a[data-go]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      go(a.dataset.go);
+    });
+  });
+}
+
+/* tabs */
+function activateTab(name){
+  $all('.tab').forEach(function(t){ t.classList.toggle('active', t.dataset.tab === name); });
+  $all('.panel').forEach(function(p){ p.classList.toggle('active', p.dataset.panel === name); });
+}
+$all('.tab').forEach(function(t){
+  t.addEventListener('click', function(){ activateTab(t.dataset.tab); });
+});
+
+/* navigation */
+function go(slug){
+  current = slug;
+  if (slug === 'overview'){
+    $('#tabbar').style.display = 'none';
+    $('#hTitle').textContent = 'Overview · How we built these recommendations';
+    $('#hMeta').innerHTML =
+      '<span>Pages audited <strong>22</strong></span>'+
+      '<span>Candidates <strong>4 per page</strong></span>'+
+      '<span>Sources <strong>4</strong></span>';
+    renderSidebar();
+    renderOverview();
+    $all('.panel').forEach(function(p){ p.classList.toggle('active', p.dataset.panel === 'overview'); });
+    window.scrollTo(0,0);
+    return;
+  }
+  var p = DATA.find(function(x){ return x.slug === slug; });
+  if (!p) return;
+  $('#tabbar').style.display = '';
+  renderSidebar();
+  renderHeader(p);
+  renderCompare(p);
+  renderSerp(p);
+  // restore tabs back to compare when leaving overview
+  activateTab('compare');
+  window.scrollTo(0,0);
+}
+
+// Boot: pull existing reviews, then render the overview
+loadAllReviews().then(function(){ go('overview'); }, function(){ go('overview'); });
+</script>
+</body>
+</html>
